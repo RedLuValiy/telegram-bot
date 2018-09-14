@@ -1,19 +1,22 @@
-import requests
 import misc
+import telebot
+from telebot import apihelper
 
 token = misc.token
-URL = 'ssl://api.telegram.org/bot' + token +'/'
+URL = 'https://api.telegram.org/bot' + token +'/'
 
+ip = '195.201.137.246'
+port = '1080'
 
-def get_updates():
-    url = URL + 'getupdates'
-    r = requests.get(url)
-    print(r.content)
+apihelper.proxy = {
+  'https': 'socks5://{}:{}'.format(ip, port)
+}
 
+apihelper.proxy = {'http':'http://x.x.x.x:port'}
+bot = telebot.TeleBot(token)
 
-def main():
-    get_updates()
+@bot.message_handler(commands=['start'])
+def start(m):
+    msg = bot.send_message(m.chat.id, 'Привет!' )
 
-
-if __name__ == '__main__':
-    main()
+bot.polling()
